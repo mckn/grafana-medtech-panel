@@ -8,7 +8,7 @@ import { addViewPort } from 'shared';
 /**
  * Runs the demo
  */
-async function run(element: HTMLDivElement, options: SimpleOptions) {
+async function run(element: HTMLDivElement, options: SimpleOptions, panelId: number) {
   const { seriesId, studyInstanceUID, wadoRsRoot } = options;
 
   // Get Cornerstone imageIds and fetch metadata into RAM
@@ -24,7 +24,7 @@ async function run(element: HTMLDivElement, options: SimpleOptions) {
     wadoRsRoot: wadoRsRoot,
   });
 
-  const viewportId = 'CT_AXIAL_STACK_' + seriesId;
+  const viewportId = `CT_AXIAL_STACK-${seriesId}-${panelId}`;
 
   const viewportInput = {
     viewportId,
@@ -39,14 +39,15 @@ async function run(element: HTMLDivElement, options: SimpleOptions) {
   viewport.render();
 }
 
-export const MedTechPanel: React.FC<PanelProps<SimpleOptions>> = ({ height, width, options }) => {
+export const MedTechPanel: React.FC<PanelProps<SimpleOptions>> = (props) => {
   const element = useRef<HTMLDivElement>(null);
+  const { height, options, width, id: panelId } = props;
 
   useEffect(() => {
     if (element.current) {
-      run(element.current, options);
+      run(element.current, options, panelId);
     }
-  }, [options]);
+  }, [options, panelId]);
 
   return (
     <>

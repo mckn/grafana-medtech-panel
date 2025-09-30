@@ -10,7 +10,6 @@ import { addViewPort } from 'shared';
  */
 async function run(element: HTMLDivElement, options: SimpleOptions) {
   const { seriesId, studyInstanceUID, wadoRsRoot } = options;
-  console.log({ options });
 
   // Get Cornerstone imageIds and fetch metadata into RAM
   // const imageIds = await createImageIdsAndCacheMetaData({

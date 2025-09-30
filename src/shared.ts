@@ -1,4 +1,4 @@
-import { RenderingEngine, Viewport, init as coreInit, setVolumesForViewports, volumeLoader } from '@cornerstonejs/core';
+import { RenderingEngine, init as coreInit, setVolumesForViewports, volumeLoader } from '@cornerstonejs/core';
 import { PublicViewportInput } from '@cornerstonejs/core/dist/esm/types';
 import { init as dicomImageLoaderInit } from '@cornerstonejs/dicom-image-loader';
 

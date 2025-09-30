@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { PanelProps } from '@grafana/data';
-import { Enums, StackViewport } from '@cornerstonejs/core';
+import { Enums } from '@cornerstonejs/core';
 import createImageIdsAndCacheMetaData from '../helpers/createImageIdsAndCacheMetaData';
 import { SimpleOptions } from 'types';
-import { addViewPort } from 'shared';
+import { setViewPort } from 'shared';
 
 /**
  * Runs the demo
  */
 async function run(element: HTMLDivElement, options: SimpleOptions, panelId: number) {
-  const { seriesId, studyInstanceUID, wadoRsRoot } = options;
+  const { seriesId, studyInstanceUID, wadoRsRoot, orientation } = options;
 
   // Get Cornerstone imageIds and fetch metadata into RAM
   // const imageIds = await createImageIdsAndCacheMetaData({
@@ -24,19 +24,43 @@ async function run(element: HTMLDivElement, options: SimpleOptions, panelId: num
     wadoRsRoot: wadoRsRoot,
   });
 
-  const viewportId = `CT_AXIAL_STACK-${seriesId}-${panelId}`;
+  // const volumeId = `volume-${orientation}-${seriesId}-${panelId}`;
 
+  // // Define a volume in memory
+  // const volume = await volumeLoader.createAndCacheVolume(volumeId, { imageIds });
+
+  const viewportId = `viewport-${orientation}-${seriesId}-${panelId}`;
   const viewportInput = {
     viewportId,
-    element,
-    type: Enums.ViewportType.STACK,
+    element: element,
+    type: Enums.ViewportType.ORTHOGRAPHIC,
+    defaultOptions: {
+      orientation: orientation as Enums.OrientationAxis,
+    },
   };
 
-  const viewport = await addViewPort<StackViewport>(viewportId, viewportInput);
+  setViewPort(seriesId, studyInstanceUID, imageIds, viewportInput);
 
-  await viewport.setStack(imageIds);
+  // engine.setViewports(viewportInput);
+  // volume.load();
 
-  viewport.render();
+  // setVolumesForViewports(engine, [{ volumeId }], [viewportId]);
+
+  // engine.render();
+
+  // const viewportId = `CT_AXIAL_STACK-${seriesId}-${panelId}`;
+
+  // const viewportInput = {
+  //   viewportId,
+  //   element,
+  //   type: Enums.ViewportType.STACK,
+  // };
+
+  // const viewport = await addViewPort<StackViewport>(viewportId, viewportInput);
+
+  // await viewport.setStack(imageIds);
+
+  // viewport.render();
 }
 
 export const MedTechPanel: React.FC<PanelProps<SimpleOptions>> = (props) => {

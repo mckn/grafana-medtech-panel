@@ -1,18 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import { PanelProps } from '@grafana/data';
-import { RenderingEngine, Enums, init as coreInit } from '@cornerstonejs/core';
-import { init as dicomImageLoaderInit } from '@cornerstonejs/dicom-image-loader';
+import { Enums, StackViewport } from '@cornerstonejs/core';
 import createImageIdsAndCacheMetaData from '../helpers/createImageIdsAndCacheMetaData';
 import { SimpleOptions } from 'types';
+import { addViewPort } from 'shared';
 
 /**
  * Runs the demo
  */
 async function run(element: HTMLDivElement, options: SimpleOptions) {
-  await coreInit();
-  await dicomImageLoaderInit();
-
   const { seriesId, studyInstanceUID, wadoRsRoot } = options;
+  console.log({ options });
 
   // Get Cornerstone imageIds and fetch metadata into RAM
   // const imageIds = await createImageIdsAndCacheMetaData({
@@ -27,9 +25,6 @@ async function run(element: HTMLDivElement, options: SimpleOptions) {
     wadoRsRoot: wadoRsRoot,
   });
 
-  const renderingEngineId = 'myRenderingEngine';
-  const renderingEngine = new RenderingEngine(renderingEngineId);
-
   const viewportId = 'CT_AXIAL_STACK_' + seriesId;
 
   const viewportInput = {
@@ -38,9 +33,7 @@ async function run(element: HTMLDivElement, options: SimpleOptions) {
     type: Enums.ViewportType.STACK,
   };
 
-  renderingEngine.enableElement(viewportInput);
-
-  const viewport: any = renderingEngine.getViewport(viewportId);
+  const viewport = await addViewPort<StackViewport>(viewportId, viewportInput);
 
   await viewport.setStack(imageIds);
 
@@ -54,7 +47,7 @@ export const MedTechPanel: React.FC<PanelProps<SimpleOptions>> = ({ height, widt
     if (element.current) {
       run(element.current, options);
     }
-  }, []);
+  }, [options]);
 
   return (
     <>

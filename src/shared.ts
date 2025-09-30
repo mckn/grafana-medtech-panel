@@ -6,7 +6,7 @@ const RENDERING_ENGINE_ID = 'grafana-medtech-panel-engine';
 let renderingEngine: RenderingEngine | null = null;
 let promise: Promise<RenderingEngine> | null = null;
 
-export const init = async (): Promise<RenderingEngine> => {
+const init = async (): Promise<RenderingEngine> => {
   if (promise) {
     return promise;
   }
@@ -20,15 +20,6 @@ export const init = async (): Promise<RenderingEngine> => {
   });
 
   return promise;
-};
-
-export const addViewPort = async <T extends Viewport>(
-  viewportId: string,
-  viewportInput: PublicViewportInput
-): Promise<T> => {
-  const engine = renderingEngine || (await init());
-  engine.enableElement(viewportInput);
-  return engine.getViewport(viewportId) as T;
 };
 
 const viewportInputs: Record<string, PublicViewportInput[]> = {};

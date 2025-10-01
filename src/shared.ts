@@ -30,6 +30,7 @@ export const setViewPort = async (
   imageIds: string[],
   viewportInput: PublicViewportInput
 ) => {
+  const { viewportId } = viewportInput;
   const engine = renderingEngine || (await init());
   const volumeId = `${studyInstanceUID}-${seriesId}`;
 
@@ -48,6 +49,6 @@ export const setViewPort = async (
 
   engine.setViewports(allInputs);
 
-  setVolumesForViewports(engine, [{ volumeId }], filteredInputIds);
-  engine.render();
+  await setVolumesForViewports(engine, [{ volumeId }], filteredInputIds);
+  engine.renderViewport(viewportId);
 };

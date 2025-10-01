@@ -27,7 +27,7 @@ async function run(element: HTMLDivElement, options: SimpleOptions, panelId: num
     },
   };
 
-  setViewPort(seriesId, studyInstanceUID, imageIds, viewportInput);
+  await setViewPort(seriesId, studyInstanceUID, imageIds, viewportInput);
 }
 
 export const MedTechPanel: React.FC<PanelProps<SimpleOptions>> = (props) => {
